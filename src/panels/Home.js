@@ -9,7 +9,7 @@ const Home = ({ id, go, fetchedUser, ...props }) => {
 		<Panel id={id}>
 		<PanelHeader>Найти потеряшку</PanelHeader>
 
-		<Group title="Для отправки опроса заполните пожалуйста формы:">
+		<Group title="Для отправки опроса заполните пожалуйста формы11111:">
 			<Div>
 				<div>
 					<div>
@@ -21,13 +21,11 @@ const Home = ({ id, go, fetchedUser, ...props }) => {
 							<File  top="Прикрепить фото (необязательно):" onChange={props.сhangeForms} name="file"  type="file" placeholder="Прикрепить фото" accept="image/*" />
 						</FormLayout>
 					</div>
-					{props.innquiryInfo.isReady ? <Div>Ищу {props.innquiryInfo.field1}. {props.innquiryInfo.field2} встретились
-                        {props.innquiryInfo.field3}. {props.innquiryInfo.field4}. {props.innquiryInfo.male ? "Понравилась" : "Понравился"},
-                        отзовись ☺
-                        <div><img className="imgFormat" src={props.innquiryInfo.imageUrl || img} alt={"img"}/></div></Div> : <div/>}
+					{props.innquiryInfo.isReady ? <Div>Ищу {props.innquiryInfo.field1}. {props.innquiryInfo.field2} встретились {props.innquiryInfo.field3}. {props.innquiryInfo.field4}. {props.innquiryInfo.male ? "Понравилась" : "Понравился"},
+                        отзовись <div><img className="imgFormat" src={props.innquiryInfo.imageUrl || img} alt={"img"}/></div></Div> : <div/>}
 
 				</div>
-
+				{props.innquiryInfo.testTex1}
 				{props.innquiryInfo.isReady ? <Button size="xl" onClick={props.sendForms}>Отправить опрос</Button> : <Button size="xl" disabled level="2">Отправить опрос</Button> }
 
 			</Div>

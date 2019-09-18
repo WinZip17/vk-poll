@@ -1,12 +1,13 @@
 import React from 'react';
 import connect from '@vkontakte/vk-connect';
-import {Div, View} from '@vkontakte/vkui';
+import {View} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import Home from './panels/Home';
 import "./App.css"
 
+
 //личный токен админа группы
-const token = "c9a7f954e750af0454602622a8c92c566a21dac6f73cc6fd17f35e8fb382a074efaaf04a95c57f9e70447";
+const token = "8562720b7714ff2af73756a192b2b17d934eff7232f8e4110d614ba8277416eab25f57e933f84f7fa404b";
 
 //id альбома для загрузки фотографий
 const album_id = "266661770";
@@ -19,8 +20,6 @@ const defaultPhoto = "photo-185650440_457239022";
 
 
 
-
-
 //получение ссылки на загрузку фотки
 const postPhotoUrl = () => {
 	connect.send("VKWebAppCallAPIMethod", {"method": "photos.getUploadServer", "request_id": "photoUrl", "params": {"album_id": album_id, "group_id": group_id,
@@ -28,7 +27,6 @@ const postPhotoUrl = () => {
 }
 
 const postPhoto = (url, photo) => {
-	debugger
 	let formData = new FormData();
 	formData.append('photo', photo);
 	const proxyurl = "https://cors-anywhere.herokuapp.com/";
@@ -44,14 +42,12 @@ const postPhoto = (url, photo) => {
 		})
 		.then(function (data) {
 			if (data) {
-				debugger
 				savePhoto(data.server, data.photos_list, data.hash);
 			} else {
 				// proccess server errors
 			}
 		})
 		.catch(function (error) {
-			debugger
 			// proccess network errors
 		});
 };
@@ -62,21 +58,20 @@ const savePhoto = (server, photos_list, hash) => {
 };
 
 const createPoll = () => {
-	let answers = JSON.stringify(["Возможно это я", "Пиши, я ее знаю", "Посмотреть результаты"]);
-	connect.send("VKWebAppCallAPIMethod", {"method": "polls.create", "request_id": "createPoll", "params": {"question": "Заголовок запроса", "is_anonymous": "1",
+	let answers = '["Возможно это я","Пиши, я ее знаю","Посмотреть результаты"]';
+	connect.send("VKWebAppCallAPIMethod", {"method": "polls.create", "request_id": "isCreatePoll", "params": {"question": "Хелп", "is_anonymous": "0",
 			"is_multiple": "0", "owner_id": "-185650440", "add_answers": answers, "v":"5.101", "access_token": token}});
-}
+};
 
 const createMessage = (message,poll, photo) => {
-	//конвертация меседжа
-	let newMessage = JSON.stringify(message);
 
 	let attachments = [photo, poll];
+
 	//сгенерированный guid
 	let guid = Math.floor(1000000000 + Math.random() * (9000000000 + 1 - 1000000000));
 
 	connect.send("VKWebAppCallAPIMethod", {"method": "wall.post", "request_id": "sendWall", "params": {"owner_id": "-185650440", "from_group": "1",
-			"message": newMessage, "attachments": attachments, "guid": guid, "v":"5.101", "access_token": token}});
+			"message": message, "attachments": attachments, "guid": guid, "v":"5.101", "access_token": token}});
 }
 
 class App extends React.Component {
@@ -94,7 +89,9 @@ class App extends React.Component {
 			isReady: false,
 			male: true,
 			imgForMessage: defaultPhoto,
-			postSendId: 0
+			postSendId: 0,
+			poll: "",
+			testTex1: "ничего не произоло"
 		};
 	}
 
@@ -117,16 +114,16 @@ class App extends React.Component {
 							this.setState({imgForMessage: `photo${e.detail.data.response[0].owner_id}_${e.detail.data.response[0].id}`});
 							createPoll();
                             break;
-                        case 'createPoll':
-                        	let poll = `poll${e.detail.data.response.owner_id}_${e.detail.data.response.id}`;
+                        case 'isCreatePoll':
+							this.setState({poll: `poll${e.detail.data.response.owner_id}_${e.detail.data.response.id}`});
 							let message = `Ищу ${this.state.field1}. ${this.state.field2} встретились ${this.state.field3}. ${this.state.field4}. ${this.state.male ? "Понравилась" : "Понравился"}, отзовись ☺`;
 							let photo = this.state.imgForMessage;
-							createMessage(message,poll,photo);
+							this.setState({testTex1: `в ответе ид группы ${e.detail.data.response.owner_id} и айди опроса ${e.detail.data.response.id}`});
+							createMessage(message, this.state.poll, photo);
                             break;
                         case 'sendWall':
 							this.setState({postSendId: e.detail.data.response.post_id, field1: "",
 								field2: "",	field3: "",	field4: "",	img : null,});
-                            console.log(e);
                             break;
                         default:
                             console.log(e);
@@ -196,6 +193,7 @@ class App extends React.Component {
 			<View activePanel={this.state.activePanel}>
 				<Home id="home" fetchedUser={this.state.fetchedUser} innquiryInfo={this.state} сhangeForms={this.сhangeForms} go={this.go}
 					  sendForms={this.sendForms}/>
+
 			</View>
 		);
 	}
