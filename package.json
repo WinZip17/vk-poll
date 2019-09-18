@@ -13,14 +13,13 @@
   "devDependencies": {
     "cross-env": "^5.2.0",
     "react-hot-loader": "^4.9.0",
-    "react-scripts": "^2.1.8"
+    "react-scripts": "^3.1.1"
   },
   "dependencies": {
     "@vkontakte/icons": "^1.8.3",
     "@vkontakte/vk-connect": "^1.5.6",
+    "@vkontakte/vk-connect-promise": "^0.2.0",
     "@vkontakte/vkui": "^2.30.5",
-    "axios": "^0.19.0",
-    "babel-eslint": "^9.0.0",
     "chalk": "^2.4.2",
     "core-js": "^3.1.4",
     "prop-types": "^15.7.2",

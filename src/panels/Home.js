@@ -9,7 +9,7 @@ const Home = ({ id, go, fetchedUser, ...props }) => {
 		<Panel id={id}>
 		<PanelHeader>Найти потеряшку</PanelHeader>
 
-		<Group title="Для отправки опроса заполните пожалуйста формы11111:">
+		<Group title="Для отправки опроса заполните пожалуйста формы:">
 			<Div>
 				<div>
 					<div>
@@ -39,6 +39,7 @@ const Home = ({ id, go, fetchedUser, ...props }) => {
 Home.propTypes = {
 	id: PropTypes.string.isRequired,
 	go: PropTypes.func.isRequired,
+	sendForms: PropTypes.func.isRequired,
 	fetchedUser: PropTypes.shape({
 		photo_200: PropTypes.string,
 		first_name: PropTypes.string,
